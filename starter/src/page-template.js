@@ -61,8 +61,8 @@ const generateTeam = team => {
     const html = [];
 
     html.push(team
-        .filter(employee => employee.getRole() === "Manager") // if true i.e. a manager, then a new array is made consisting of managers
-        .map(manager => generateManager(manager)) // map makes a new array where each of the managers in the arr above is generated
+        .filter(employee => employee.getRole() === "Manager")
+        .map(manager => generateManager(manager))
     );
     html.push(team
         .filter(employee => employee.getRole() === "Engineer")

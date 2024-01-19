@@ -5,41 +5,13 @@ const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
 
-const OUTPUT_DIR = path.resolve(__dirname, "output");
+const OUTPUT_DIR = path.resolve(__dirname, "output"); // if exists("output") OUTPUT_DIR
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./src/page-template.js");
 
-// questions
-// where is the render method mentioned? Call the `render` function (provided for you) and pass in an array containing all employee objects; 
-// team is the argument passed in to the generateTeam function but where is the team array?
-// html.push(team
-//     .filter(employee => employee.getRole() === "Manager") // here pushing team.filter.map but what is the team array we are filtering?
-//     .map(manager => generateManager(manager))
-// );
-// const OUTPUT_DIR = path.resolve(__dirname, "output"); // What does this do?
-// const outputPath = path.join(OUTPUT_DIR, "team.html"); // What does this do?
-//Is there a way to use interpolation in the inquirer ${} instead of repeating code for all these questions i.e. "What is the ${employee.title}'s name?"
-// I repeated the menu multiple choice options after each block of questions, repetition again. Is there a way to manipulate the order of questions with inquirer? Code to make that question pop up at the end of each block?
-// Do we need to change the version of inquirer to 8.0.0?
-// IS THERE A WAY OF USING SUPER TO IMPORT NAME ID AND EMAIL FROM PARENT CONSTRUCTOR? I'M THINKING NO AS HOW WOULD THE MANAGER PASS THAT IN?
-
-// class Engineer extends Employee {
-//     constructor(name, id, email, github) {
-//     super();
-//     this.name = name;
-//     this.id = id;
-//     this.email = email;
-//     this.github = github;
-//     }
-
-
-
-
-
-
-
 // TODO: Write Code to gather information about the development team members, and render the HTML file.
+// ADD GITIGNORE FOLDER FOR THE NODE STUFF LIKE IN THE LAST CHALLENGE
 
 inquirer
 .prompt([
@@ -152,9 +124,69 @@ inquirer
         name: 'menu',
     },
 ])
-// .then(render(team)) Call the `render` function (provided for you) and pass in an array containing all employee objects
-// .then(fs.writeFile(team.html, "INSERT CONTENT FROM RENDER HERE") * Write it to a file named `team.html` in the `output` folder. 
-//     * You can use the provided variable `outputPath` to target this location.
+
+let team = [];
+
+function app() {
+    function createManager() {
+        inquirer.prompt([
+            {
+                type: 'input',
+                message: "What is the Team Manager's name?",
+                name: 'name',
+            },
+        ]).then(answers => {
+            const manager = new Manager(answers.name, answers.id, answers.email, answers.officeNumber);
+            team.push(manager);
+            createTeam();
+        })
+    }
+    function createTeam() {
+        inquirer.prompt([
+            {
+                type: 'list',
+                message: "Would you like to:",
+                choices: ["Add an engineer?", "Add an intern?", "Finish building team?"],
+                name: 'menu'
+            },
+        ]).then(answers => {
+            if (answers.menu === "Add an engineer?") {
+                addEngineer();
+                return;
+            } else if (answers.menu === "Add an intern?") {
+                addIntern();
+                return;
+            } else {
+                buildTeam();
+                return;
+            }       
+        })
+    }
+    function addEngineer() {
+        inquirer.prompt([
+            {
+                type: 'input',
+                message: "What is the Team Manager's name?",
+                name: 'name',
+            },
+        ]).then(answers => {
+            const engineer = new Engineer(answers.name, answers.id, answers.email, answers.github);
+            team.push(engineer);
+            createTeam();
+        })
+    }
+    function addIntern() {
+        team.push(intern);
+    }
+    function buildTeam() {
+        fs.writeFile(outputPath, render(team), (err) => // if output folder exists continue, if not create it //exists method fs
+        err ? console.error(err) : console.log('File created successfully!'))
+        } 
+    createManager()
+}
+
+app();
+
 
 
 // README
