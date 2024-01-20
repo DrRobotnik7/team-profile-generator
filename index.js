@@ -9,9 +9,6 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 
 const render = require("./src/page-template.js");
 
-// TODO:
-    // Sort the OUTPUT_DIR and outputPath - if exists "output" folder exists, write file there, if it doesn't make it then write filter there
-    // * You may need to check if the `output` folder exists and create it if it does not - //atm it overwrites the existing HTML file
 // WISHLIST: 
     // Add validation to ensure the input is correct for each question
     // Sort CSS so it looks better
@@ -47,6 +44,7 @@ function runTeamBuilder() {
             createTeam();
         })
     }
+
     function createTeam() {
         inquirer.prompt([
             {
@@ -68,6 +66,7 @@ function runTeamBuilder() {
             }       
         })
     }
+
     function addEngineer() {
         inquirer.prompt([
             {
@@ -96,6 +95,7 @@ function runTeamBuilder() {
             createTeam();
         })
     }
+
     function addIntern() {
         inquirer.prompt([
         {
@@ -124,6 +124,7 @@ function runTeamBuilder() {
         createTeam();
     })
     }
+
     function buildTeam() {
         inquirer.prompt([
             {
@@ -138,20 +139,18 @@ function runTeamBuilder() {
             } else writeFile(answers)
         })
     }
+
     function makeDirectory() {
-        fs.mkdir(OUTPUT_DIR, function(err){
-            if(err){
-                console.log("failed to create directory");
-                return console.error(err);
-            } else {
-                console.log("Directory created successfully!");
-            }
-        });
+        fs.mkdir(OUTPUT_DIR, err => 
+            err ? console.error(err) : console.log('Directory created successfully!'))
     }
+    
     function writeFile(answers) {
         const outputPath = path.join(OUTPUT_DIR, `${answers.teamname}.html`)
-        fs.writeFile(outputPath, render(team), (err) =>
-                err ? console.error(err) : console.log('File created successfully!'))
+        if (!fs.existsSync(outputPath)) {
+        fs.writeFile(outputPath, render(team), err =>
+            err ? console.error(err) : console.log('File created successfully!'))
+        } else console.log("Team with that name already exists!")
     }
 
     createManager();
