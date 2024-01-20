@@ -5,6 +5,8 @@ const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
 
+const OUTPUT_DIR = path.resolve(__dirname, "output");
+
 const render = require("./src/page-template.js");
 
 // TODO:
@@ -16,7 +18,7 @@ const render = require("./src/page-template.js");
 
 let team = [];
 
-function app() {
+function runTeamBuilder() {
     function createManager() {
         inquirer.prompt([
             {
@@ -123,7 +125,6 @@ function app() {
     })
     }
     function buildTeam() {
-        // if output folder exists, run the code below, if it doesn't then make it then run the code below
         inquirer.prompt([
             {
                 type: 'input',
@@ -131,16 +132,32 @@ function app() {
                 name: 'teamname',
             },
         ]).then(answers => {
-            const OUTPUT_DIR = path.resolve(__dirname, "output");
-            const outputPath = path.join(OUTPUT_DIR, `${answers.teamname}.html`);
-            fs.writeFile(outputPath, render(team), (err) =>
-            err ? console.error(err) : console.log('File created successfully!'))
+            if (!fs.existsSync(OUTPUT_DIR)) {
+                makeDirectory()
+                writeFile(answers)
+            } else writeFile(answers)
         })
     }
+    function makeDirectory() {
+        fs.mkdir(OUTPUT_DIR, function(err){
+            if(err){
+                console.log("failed to create directory");
+                return console.error(err);
+            } else {
+                console.log("Directory created successfully!");
+            }
+        });
+    }
+    function writeFile(answers) {
+        const outputPath = path.join(OUTPUT_DIR, `${answers.teamname}.html`)
+        fs.writeFile(outputPath, render(team), (err) =>
+                err ? console.error(err) : console.log('File created successfully!'))
+    }
+
     createManager();
 }
 
-app();
+runTeamBuilder();
 
 
 // README
