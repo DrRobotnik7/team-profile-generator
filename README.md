@@ -2,7 +2,7 @@
 
 ## Description
 
-A command-line application that takes in information about employees on a software engineering team, then generates an HTML webpage that displays summaries for each person. 
+A command-line application that takes in information about employees on a software engineering team, then generates an HTML webpage that displays summaries for each person.
 
 ## Table of Contents
 
@@ -15,19 +15,21 @@ A command-line application that takes in information about employees on a softwa
 
 - Install node.js on your system.
 - Save the Team Profile Generator code to your hard drive.
-- Navigate to the folder containing index.js, either with the command prompt or with VS Code's integrated terminal.
-- Type "node index.js" to run the application
+- In the terminal, navigate to the root folder for the application and enter "npm install".
+- Type "node index.js" to run the application.
 
 ## Usage
 
-URL: https://drrobotnik7.github.io/random-password-generator/
+- Answer the questions to create the Team Manager's profile
+- Once completed, you will be asked if you want to add an Engineer / Intern to the team, or if you want to finish.
+- If you choose to add a new employee, answer the questions that follow to create their profile.
+- Repeat until you have finished creating a profile for every team member.
+- Upon completion you will be asked to give your Team a name.
+- Finally your HTML file will be created and saved in the folder called "output". 
+- Right click the file and click "Open in Default Browser" to view your team profile.
 
-- Click on the "Generate Password" button. 
-- Select a password length from between 8 and 128 characters. Choosing a number out of that range, or not using a number at all, will cause the prompt to just repeat until a valid option is chosen.
-- Click "OK" on the character types you would like included in your password. You can choose from special characters, numbers, lowercase letters and uppercase letter, in that order.
-- If you don't choose any of the first 3 options, you will automatically have an all uppercase password generated for you.
-
-![Password Generator screenshot](assets/rpg-screenshot.png)
+![Team Profile Generator screenshot](assets/team-profile-generator-screenshot.png)
+![Team Profile HTML Sample screenshot](assets/team-profile-html-sample-screenshot.png)
 
 ## Credits
 
