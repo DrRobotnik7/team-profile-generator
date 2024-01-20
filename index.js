@@ -12,6 +12,14 @@ const render = require("./src/page-template.js");
 // WISHLIST: 
     // Add validation to ensure the input is correct for each question
     // Sort CSS so it looks better
+    // Change the My Team in HTML to be the teamName, ${teamName} export a variable from here? or push teamName to the team array and access it in the page template if the array is being sent there via render?
+    // Ask Ivan - how is the render(team) working? Is it exporting the team array to the page-template?
+                        // html.push(team
+                        //     .filter(employee => employee.getRole() === "Manager")
+                        //     .map(manager => generateManager(manager))
+                        //     );
+        // The page template exports the function that makes the whole HTML
+                                // module.exports = team => {  }        
 
 let team = [];
 
@@ -157,7 +165,6 @@ function runTeamBuilder() {
 }
 
 runTeamBuilder();
-
 
 // README
 
