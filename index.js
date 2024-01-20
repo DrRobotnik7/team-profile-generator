@@ -5,125 +5,14 @@ const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
 
-const OUTPUT_DIR = path.resolve(__dirname, "output"); // if exists("output") OUTPUT_DIR
-const outputPath = path.join(OUTPUT_DIR, "team.html");
-
 const render = require("./src/page-template.js");
 
-// TODO: Write Code to gather information about the development team members, and render the HTML file.
-
-
-inquirer
-.prompt([
-    {
-        type: 'input',
-        message: "What is the Team Manager's name?",
-        name: 'name',
-    },
-    {
-        type: 'input',
-        message: "What is the Team Manager's employee ID?",
-        name: 'id',
-    },
-    {
-        type: 'input',
-        message: "What is the Team Manager's email address?",
-        name: 'email',
-    },
-    {
-        type: 'input',
-        message: "What is the Team Manager's office number?",
-        name: 'officeNumber',
-    },
-    {
-        type: 'list',
-        message: "Would you like to:",
-        choices: [
-            {
-                name: "Add an engineer?"
-            },
-            {
-                name: "Add an intern?"
-            },
-            {
-                name: "Finish building team?"
-            }
-        ],
-        name: 'menu',
-    },
-    {
-        type: 'input',
-        message: "What is the Engineer's name?",
-        name: 'EngName',
-    },
-    {
-        type: 'input',
-        message: "What is the Engineer's employee ID?",
-        name: 'EngId',
-    },
-    {
-        type: 'input',
-        message: "What is the Engineer's email address?",
-        name: 'EngEmail',
-    },
-    {
-        type: 'input',
-        message: "What is the Engineer's GitHub username?",
-        name: 'gitHub',
-    },
-    {
-        type: 'list',
-        message: "Would you like to:",
-        choices: [
-            {
-                name: "Add an engineer?"
-            },
-            {
-                name: "Add an intern?"
-            },
-            {
-                name: "Finish building team?"
-            }
-        ],
-        name: 'menu',
-    },
-    {
-        type: 'input',
-        message: "What is the Intern's name?",
-        name: 'InternName',
-    },
-    {
-        type: 'input',
-        message: "What is the Intern's employee ID?",
-        name: 'InternId',
-    },
-    {
-        type: 'input',
-        message: "What is the Intern's email address?",
-        name: 'InternEmail',
-    },
-    {
-        type: 'input',
-        message: "Which school is the Intern enrolled with?",
-        name: 'school',
-    },
-    {
-        type: 'list',
-        message: "Would you like to:",
-        choices: [
-            {
-                name: "Add an engineer?"
-            },
-            {
-                name: "Add an intern?"
-            },
-            {
-                name: "Finish building team?"
-            }
-        ],
-        name: 'menu',
-    },
-])
+// TODO:
+    // Sort the OUTPUT_DIR and outputPath - if exists "output" folder exists, write file there, if it doesn't make it then write filter there
+    // * You may need to check if the `output` folder exists and create it if it does not - //atm it overwrites the existing HTML file
+// WISHLIST: 
+    // Add validation to ensure the input is correct for each question
+    // Sort CSS so it looks better
 
 let team = [];
 
@@ -134,6 +23,21 @@ function app() {
                 type: 'input',
                 message: "What is the Team Manager's name?",
                 name: 'name',
+            },
+            {
+                type: 'input',
+                message: "What is the Team Manager's employee ID?",
+                name: 'id',
+            },
+            {
+                type: 'input',
+                message: "What is the Team Manager's email address?",
+                name: 'email',
+            },
+            {
+                type: 'input',
+                message: "What is the Team Manager's office phone number?",
+                name: 'officeNumber',
             },
         ]).then(answers => {
             const manager = new Manager(answers.name, answers.id, answers.email, answers.officeNumber);
@@ -149,11 +53,11 @@ function app() {
                 choices: ["Add an engineer?", "Add an intern?", "Finish building team?"],
                 name: 'menu'
             },
-        ]).then(answers => {
-            if (answers.menu === "Add an engineer?") {
+        ]).then(answer => {
+            if (answer.menu === "Add an engineer?") {
                 addEngineer();
                 return;
-            } else if (answers.menu === "Add an intern?") {
+            } else if (answer.menu === "Add an intern?") {
                 addIntern();
                 return;
             } else {
@@ -166,8 +70,23 @@ function app() {
         inquirer.prompt([
             {
                 type: 'input',
-                message: "What is the Team Manager's name?",
+                message: "What is the Engineer's name?",
                 name: 'name',
+            },
+            {
+                type: 'input',
+                message: "What is the Engineer's employee ID?",
+                name: 'id',
+            },
+            {
+                type: 'input',
+                message: "What is the Engineer's email address?",
+                name: 'email',
+            },
+            {
+                type: 'input',
+                message: "What is the Engineer's GitHub username?",
+                name: 'github',
             },
         ]).then(answers => {
             const engineer = new Engineer(answers.name, answers.id, answers.email, answers.github);
@@ -176,17 +95,52 @@ function app() {
         })
     }
     function addIntern() {
+        inquirer.prompt([
+        {
+            type: 'input',
+            message: "What is the Intern's name?",
+            name: 'name',
+        },
+        {
+            type: 'input',
+            message: "What is the Intern's employee ID?",
+            name: 'id',
+        },
+        {
+            type: 'input',
+            message: "What is the Intern's email address?",
+            name: 'email',
+        },
+        {
+            type: 'input',
+            message: "Which school is the Intern enrolled with?",
+            name: 'school',
+        }
+    ]).then(answers => {
+        const intern = new Intern(answers.name, answers.id, answers.email, answers.school);
         team.push(intern);
+        createTeam();
+    })
     }
     function buildTeam() {
-        fs.writeFile(outputPath, render(team), (err) => // if output folder exists continue, if not create it //exists method fs
-        err ? console.error(err) : console.log('File created successfully!'))
-        } 
-    createManager()
+        // if output folder exists, run the code below, if it doesn't then make it then run the code below
+        inquirer.prompt([
+            {
+                type: 'input',
+                message: "What is the Team's name?",
+                name: 'teamname',
+            },
+        ]).then(answers => {
+            const OUTPUT_DIR = path.resolve(__dirname, "output");
+            const outputPath = path.join(OUTPUT_DIR, `${answers.teamname}.html`);
+            fs.writeFile(outputPath, render(team), (err) =>
+            err ? console.error(err) : console.log('File created successfully!'))
+        })
+    }
+    createManager();
 }
 
 app();
-
 
 
 // README
@@ -248,84 +202,3 @@ app();
 //   * Create an HTML file using the HTML returned from the `render` function. 
 //     * Write it to a file named `team.html` in the `output` folder. 
 //     * You can use the provided variable `outputPath` to target this location.
-
-// ---
-
-// ## Mock-Up
-
-// The following image shows a mock-up of the generated HTML’s appearance and functionality:
-
-// ![HTML webpage titled “My Team” features five boxes listing employee names, titles, and other key info.](./Assets/14-object-oriented-programming-challenge-demo.png)
-
-// The styling in the image is just an example, so feel free to add your own.
-
-// ---
-
-// ## Getting Started
-
-// This Challenge will combine many of the skills we've covered so far. In addition to the User Story and Acceptance Criteria, we’ve provided some guidelines to help get started.
-
-// Your application should use [Jest](https://www.npmjs.com/package/jest) for running the unit tests and [Inquirer](https://www.npmjs.com/package/inquirer) for collecting input from the user. The application will be invoked by using the following command:
-
-// ```bash
-// node index.js
-// ```
-
-// ---
-
-// ## Hints
-
-// * You will want to make your methods as pure as possible. This means try to make your methods simple so that they are easier to test.
-
-// * The different employee types should all inherit some methods and properties from a base class of `Employee`.
-
-// * Be sure to test out each class and verify it generates an object with the correct structure and methods. This structure will be crucial in order for the provided `render` function to work!
-
-// * You may need to check if the `output` folder exists and create it if it does not.
-
-// ---
-
-// ## Grading Requirements
-
-// This Challenge is graded based on the following criteria: 
-
-// ### Deliverables: 25%
-
-// * A sample HTML file generated using the application must be submitted.
-
-// * Your GitHub repository containing your application code.
-
-// ### Technical Acceptance Criteria: 50%
-
-// * Satisfies all of the preceding acceptance criteria plus the following:
-
-// 	* Uses the [Inquirer package](https://www.npmjs.com/package/inquirer).
-
-// 	* All tests pass using the [Jest package](https://www.npmjs.com/package/jest).
-
-//   * The application must have `Employee`, `Manager`, `Engineer`, and `Intern` classes.
-
-// ### Repository Quality: 25%
-
-// * Repository has a unique name.
-
-// * Repository follows best practices for file structure and naming conventions.
-
-// * Repository follows best practices for class/id naming conventions, indentation, quality comments, etc.
-
-// * Repository contains multiple descriptive commit messages.
-
-// * Repository contains a high-quality readme with description.
-
-// ---
-
-// ## Review
-
-// You are required to submit the following for review:
-
-// * A sample HTML file generated using your application.
-
-// * The URL of the GitHub repository, with a unique name and a readme describing the project.
-
-// ---
-// © 2023 edX Boot Camps LLC. Confidential and Proprietary. All Rights Reserved.
