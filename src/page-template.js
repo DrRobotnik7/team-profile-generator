@@ -67,7 +67,7 @@ const generateTeam = team => {
     html.push(team
         .filter(employee => employee.getRole() === "Engineer")
         .map(engineer => generateEngineer(engineer))
-        .join("") // Makes a string out of the array created by .map() - but why is this not done for the managers? is there just one manager?
+        .join("")
     );
     html.push(team
         .filter(employee => employee.getRole() === "Intern")
@@ -80,7 +80,7 @@ const generateTeam = team => {
 }
 
 // exports function to generate entire page
-module.exports = team => {
+module.exports = (team, teamname) => {
 
     return `
 <!DOCTYPE html>
@@ -101,7 +101,7 @@ module.exports = team => {
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 jumbotron mb-3 team-heading bg-info">
-                <h1 class="text-center">My Team</h1>
+                <h1 class="text-center">${teamname}</h1>
             </div>
         </div>
     </div>

@@ -9,17 +9,6 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 
 const render = require("./src/page-template.js");
 
-// WISHLIST: 
-    // Add validation to ensure the input is correct for each question
-    // Change the My Team in HTML to be the teamName, ${teamName} export a variable from here? or push teamName to the team array and access it in the page template if the array is being sent there via render?
-    // Ask Ivan - how is the render(team) working? Is it exporting the team array to the page-template?
-                        // html.push(team
-                        //     .filter(employee => employee.getRole() === "Manager")
-                        //     .map(manager => generateManager(manager))
-                        //     );
-        // The page template exports the function that makes the whole HTML
-                                // module.exports = team => {  }        
-
 let team = [];
 
 function runTeamBuilder() {
@@ -155,7 +144,7 @@ function runTeamBuilder() {
     function writeFile(answers) {
         const outputPath = path.join(OUTPUT_DIR, `${answers.teamname}.html`)
         if (!fs.existsSync(outputPath)) {
-        fs.writeFile(outputPath, render(team), err =>
+        fs.writeFile(outputPath, render(team, answers.teamname), err =>
             err ? console.error(err) : console.log('File created successfully!'))
         } else console.log("Team with that name already exists!")
     }
