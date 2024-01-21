@@ -80,7 +80,7 @@ const generateTeam = team => {
 }
 
 // exports function to generate entire page
-module.exports = (team, teamname) => {
+module.exports = (team, teamname) => { // I added the teamname parameter here so that the team name can be displayed on the web page
 
     return `
 <!DOCTYPE html>

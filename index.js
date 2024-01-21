@@ -7,12 +7,12 @@ const fs = require("fs");
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 
-const render = require("./src/page-template.js");
+const render = require("./src/page-template.js"); // Imports the function from page-template and creates the content that is passed to writeFile 
 
-let team = [];
+let team = []; // This is the array that will be populated with the employee objects created from the user's answers. This is passed to the render function which is ultimately used to generate the HTML in page-template.js
 
-function runTeamBuilder() {
-    function createManager() {
+function runTeamBuilder() { // This is the core application logic which is called when node index.js is run
+    function createManager() { // This asks the user questions, creates the Manager and pushes to the team array. Then calls the menu function.
         inquirer.prompt([
             {
                 type: 'input',
@@ -37,11 +37,11 @@ function runTeamBuilder() {
         ]).then(answers => {
             const manager = new Manager(answers.name, answers.id, answers.email, answers.officeNumber);
             team.push(manager);
-            createTeam();
+            menu();
         })
     }
 
-    function createTeam() {
+    function menu() { // This menu asks the user if they would like to add another employee or finish building the team
         inquirer.prompt([
             {
                 type: 'list',
@@ -63,7 +63,7 @@ function runTeamBuilder() {
         })
     }
 
-    function addEngineer() {
+    function addEngineer() { // This asks the user questions, creates the Engineer and pushes to the team array. Then calls the menu function.
         inquirer.prompt([
             {
                 type: 'input',
@@ -88,11 +88,11 @@ function runTeamBuilder() {
         ]).then(answers => {
             const engineer = new Engineer(answers.name, answers.id, answers.email, answers.github);
             team.push(engineer);
-            createTeam();
+            menu();
         })
     }
 
-    function addIntern() {
+    function addIntern() { // This asks the user questions, creates the Intern and pushes to the team array. Then calls the menu function.
         inquirer.prompt([
         {
             type: 'input',
@@ -117,39 +117,39 @@ function runTeamBuilder() {
     ]).then(answers => {
         const intern = new Intern(answers.name, answers.id, answers.email, answers.school);
         team.push(intern);
-        createTeam();
+        menu();
     })
     }
 
-    function buildTeam() {
+    function buildTeam() { // Once the user is finished building the team, this function asks for the team name and creates the HTML file
         inquirer.prompt([
             {
                 type: 'input',
                 message: "What is the Team's name?",
                 name: 'teamname',
             },
-        ]).then(answers => {
-            if (!fs.existsSync(OUTPUT_DIR)) {
+        ]).then(answer => {
+            if (!fs.existsSync(OUTPUT_DIR)) { // This code block checks if the "output" folder already exists and creates it if it doesn't
                 makeDirectory()
-                writeFile(answers)
-            } else writeFile(answers)
+                writeFile(answer) // This then writes the file using the answer to the "output" directory
+            } else writeFile(answer)
         })
     }
 
-    function makeDirectory() {
+    function makeDirectory() { // This makes the "output" directory and informs the user if successful or not
         fs.mkdir(OUTPUT_DIR, err => 
             err ? console.error(err) : console.log('Directory created successfully!'))
     }
     
-    function writeFile(answers) {
-        const outputPath = path.join(OUTPUT_DIR, `${answers.teamname}.html`)
-        if (!fs.existsSync(outputPath)) {
-        fs.writeFile(outputPath, render(team, answers.teamname), err =>
+    function writeFile(answer) { // This function takes in the teamname answer as a parameter and writes a file called ${answer.teamname}.html
+        const outputPath = path.join(OUTPUT_DIR, `${answer.teamname}.html`) // This stores the file path to pass to the writeFile method
+        if (!fs.existsSync(outputPath)) { // Checks if the file already exists, if it does the file won't be created to prevent overwriting file
+        fs.writeFile(outputPath, render(team, answer.teamname), err => // The team array and the team name are passed in to the render function
             err ? console.error(err) : console.log('File created successfully!'))
-        } else console.log("Team with that name already exists!")
+        } else console.log("Team with that name already exists!") // This informs the user 
     }
 
-    createManager();
+    createManager(); // This calls the createManager function which triggers the start of the application
 }
 
-runTeamBuilder();
+runTeamBuilder(); // This runs the logic for the application
